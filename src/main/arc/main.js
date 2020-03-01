@@ -19,24 +19,24 @@ let p = 8;
 // Данные из выбранного варианта
 let cashArr, shadowArr, searchArr;
 // Переменные, для хранения промежуточных состояний таблиц
-let previousT1_1,previousT2_1,previousB1_1,previousB2_1,previousProcessor_1,previousTags_1,previousCache_1;
-let previousT1_2,previousT2_2,previousB1_2,previousB2_2,previousProcessor_2,previousTags_2,previousCache_2;
+let previousT1_1, previousT2_1, previousB1_1, previousB2_1, previousProcessor_1, previousTags_1, previousCache_1;
+let previousT1_2, previousT2_2, previousB1_2, previousB2_2, previousProcessor_2, previousTags_2, previousCache_2;
 // Указатель на текущую строку
 let pointer = 0;
 // Параметр, определяющий условия удаления строки
 let valid_dirty;
 
 //Выбираем вариант и заполняем таблицы данными из варианта
-document.getElementById("variant").addEventListener("change", function(){
+document.getElementById("variant").addEventListener("change", function () {
 	// отображаем таблицы
 	let elems = document.querySelectorAll(".hide");
-	[].forEach.call(elems, function(el) {
-    	el.classList.remove("hide");
+	[].forEach.call(elems, function (el) {
+		el.classList.remove("hide");
 	});
 	// прячем поле выбора варианта 
 	elems = document.querySelectorAll(".variant");
-	[].forEach.call(elems, function(el) {
-    	el.classList.add("hide");
+	[].forEach.call(elems, function (el) {
+		el.classList.add("hide");
 	});
 	// читаем данные варианта из json-файла
 	let arr = readTextFile(this.value);
