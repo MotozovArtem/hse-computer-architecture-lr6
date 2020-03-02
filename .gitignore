@@ -1,2 +1,15 @@
+# Node.js files
 **/node_modules/*
+
+# Output and distribute files
 **/dist/*
+**/out/*
+
+# Logs
+*.log*
+
+# Visual Studio and Visual Studio Code workspace directories
+**/.vs/*
+**/.vscode/*
+
+.DS_Store
