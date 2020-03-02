@@ -4,10 +4,11 @@
   "description": "A minimal Electron application",
   "main": "main.js",
   "scripts": {
-    "start": "electron .",
-    "build": "electron-packager . cashStrategies --platform=win32 --arch=x64 --version=0.33.3 --app-version=0.1.0 --out=dist --no-prune",
+    "start": "npm run build && electron ./dist/main.js",
+    "build": "webpack --config ./webpack.config.js",
     "rebuild": "electron-rebuild -f -w serialport"
   },
+  
   "repository": "https://github.com/electron/electron-quick-start",
   "keywords": [
     "Electron",
@@ -19,7 +20,8 @@
   "author": "GitHub",
   "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "^7.1.11"
+    "electron": "^7.1.11",
+    "html-webpack-plugin": "^3.2.0"
   },
   "dependencies": {
     "@types/react": "^16.9.19",

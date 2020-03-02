@@ -1,0 +1,6 @@
+// "start": "electron .",
+// "build": "electron-packager . cashStrategies --platform=win32 --arch=x64 --version=0.33.3 --app-version=0.1.0 --out=dist --no-prune",
+
+
+
+    // "start": "npm run build && electron ./dist/main.js",
