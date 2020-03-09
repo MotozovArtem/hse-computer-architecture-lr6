@@ -1,10 +1,10 @@
 import IAlgorithm from "./IAlgorithm";
-import Algorithm from "./Algorithms";
+import Algorithms from "./Algorithms";
 
 export default class MruAlgorithm implements IAlgorithm{
 
-    getAlgorithm(): Algorithm {
-        return Algorithm.MRU;
+    getAlgorithmType(): Algorithms {
+        return Algorithms.MRU;
     }
     
 }

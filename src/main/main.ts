@@ -9,11 +9,14 @@ function createWindow(): void {
     mainWindow = new BrowserWindow({
         height: 768,
         width: 1024,
+        maximizable: true,
         webPreferences: {
             webSecurity: false,
             devTools: process.env.NODE_ENV === 'production' ? false : true
         }
     });
+
+    mainWindow.maximize();
 
     // and load the index.html of the app.
     mainWindow.loadURL(

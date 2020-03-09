@@ -1,4 +1,4 @@
-enum Algorithm {
+enum Algorithms {
     RND,
     LRU,
     LFU,
@@ -8,4 +8,4 @@ enum Algorithm {
     CAR,
 }
 
-export default Algorithm;
+export default Algorithms;

@@ -4,12 +4,19 @@ import Routes from "../util/Routes";
 
 export default class Navbar extends React.PureComponent {
     public render() {
+        debugger;
         return (
             <nav className="col-md-2 d-none d-md-block bg-light sidebar">
                 <div className="sidebar-sticky">
                     <ul className="nav flex-column">
                         <li className="nav-item">
-                            <Link className="nav-link active" to={Routes.RND}>RND</Link>
+                            <Link className="nav-link active" to={Routes.HOME}>Home</Link>
+                        </li>
+                        <li className="nav-item">
+                            <Link className="nav-link" to={Routes.MANUAL}>Manual</Link>
+                        </li>
+                        <li className="nav-item">
+                            <Link className="nav-link" to={Routes.RND}>RND</Link>
                         </li>
                         <li className="nav-item">
                             <Link className="nav-link" to={Routes.FIFO}>FIFO</Link>

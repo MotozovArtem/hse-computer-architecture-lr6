@@ -1,9 +1,9 @@
 import IAlgorithm from "./IAlgorithm";
-import Algorithm from "./Algorithms";
+import Algorithms from "./Algorithms";
 
 export default class RndAlgorithm implements IAlgorithm{
-    getAlgorithm(): Algorithm {
-        return Algorithm.RND;
+    getAlgorithmType(): Algorithms {
+        return Algorithms.RND;
     }
     
 }

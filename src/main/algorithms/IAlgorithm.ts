@@ -1,5 +1,5 @@
-import Algorithm from "./Algorithms";
+import Algorithms from "./Algorithms";
 
 export default interface IAlgorithm {
-    getAlgorithm(): Algorithm;
+    getAlgorithmType(): Algorithms;
 }

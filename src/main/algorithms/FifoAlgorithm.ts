@@ -1,9 +1,9 @@
 import IAlgorithm from "./IAlgorithm";
-import Algorithm from "./Algorithms";
+import Algorithms from "./Algorithms";
 
 export default class FifoAlgorithm implements IAlgorithm{
-    getAlgorithm(): Algorithm {
-        return Algorithm.FIFO;
+    getAlgorithmType(): Algorithms {
+        return Algorithms.FIFO;
     }
     
 }

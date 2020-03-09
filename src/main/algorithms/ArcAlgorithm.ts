@@ -1,9 +1,9 @@
 import IAlgorithm from "./IAlgorithm";
-import Algorithm from "./Algorithms";
+import Algorithms from "./Algorithms";
 
 export default class ArcAlgorithm implements IAlgorithm{
-    getAlgorithm(): Algorithm {
-        return Algorithm.ARC;
+    getAlgorithmType(): Algorithms {
+        return Algorithms.ARC;
     }
     
 }

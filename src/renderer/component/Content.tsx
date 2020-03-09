@@ -9,12 +9,31 @@ import CarView from "./algorithms/CarView";
 import FifoView from "./algorithms/FifoView";
 import Manual from "../util/Manual";
 import Routes from "../util/Routes";
+import Algorithms from "@main/algorithms/Algorithms";
+import Home from "./Home";
 
-export default class Content extends React.Component<{}, {}> {
+interface ContentState {
+    _currentAlgorithm: Algorithms;
+}
+
+export default class Content extends React.Component<{}, ContentState> {
+
+
+    constructor(props: any, state: ContentState) {
+        super(props, state);
+        this.state = state;
+    }
+
     public render() {
         debugger;
         return (
             <Switch>
+                <Route path={Routes.HOME} exact strict>
+                    <Home />
+                </Route>
+                <Route path={Routes.MANUAL}>
+                    <Manual />
+                </Route>
                 <Route path={Routes.RND}>
                     <RndView />
                 </Route>
@@ -35,9 +54,6 @@ export default class Content extends React.Component<{}, {}> {
                 </Route>
                 <Route path={Routes.FIFO} >
                     <FifoView />
-                </Route>
-                <Route path={Routes.HOME}>
-                    <Manual />
                 </Route>
             </Switch>
         );
