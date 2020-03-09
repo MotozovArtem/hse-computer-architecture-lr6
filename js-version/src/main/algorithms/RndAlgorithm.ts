@@ -5,5 +5,5 @@ export default class RndAlgorithm implements IAlgorithm{
     getAlgorithmType(): Algorithms {
         return Algorithms.RND;
     }
-    
+
 }

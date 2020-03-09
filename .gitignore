@@ -4,6 +4,7 @@
 # Output and distribute files
 **/dist/*
 **/out/*
+**/target/*
 
 # Logs
 *.log*
@@ -13,3 +14,6 @@
 **/.vscode/*
 
 .DS_Store
+
+# IntelliJ IDEA
+.idea

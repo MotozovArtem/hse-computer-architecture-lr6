@@ -2,14 +2,14 @@
   "name": "hse-computer-architecture-lr6",
   "version": "0.0.1",
   "description": "Pre-configured boilerplate for Electron + React + TypeScript",
-  "main": "./dist/main.bundle.js",
+  "main": "../dist/main.bundle.js",
   "scripts": {
-    "start": "electron ./dist/main.bundle.js",
-    "dev": "rimraf dist && cross-env NODE_ENV=development webpack --watch --progress --colors",
-    "prod": "rimraf dist && cross-env NODE_ENV=production webpack --progress --colors",
-    "test": "mocha -r ts-node/register -r tsconfig-paths/register \"test/**/*.ts\"",
-    "build:win": "electron-builder build --win --x64",
-    "build:mac": "electron-builder build --mac --x64"
+    "start": "../node_modules/.bin/electron ./dist/main.bundle.js",
+    "dev": "../node_modules/.bin/rimraf dist && cross-env NODE_ENV=development webpack --watch --progress --colors",
+    "prod": "../node_modules/.bin/rimraf dist && cross-env NODE_ENV=production webpack --progress --colors",
+    "test": "../node_modules/.bin/mocha -r ts-node/register -r tsconfig-paths/register \\\"test/**/*.ts\\\"",
+    "build:win": "../node_modules/.bin/electron-builder build --win --x64",
+    "build:mac": "../node_modules/.bin/electron-builder build --mac --x64"
   },
   "build": {
     "appId": "ru.rienel.computer-architechture-lr6",
