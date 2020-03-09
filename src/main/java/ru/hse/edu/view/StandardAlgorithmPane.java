@@ -55,4 +55,14 @@ public class StandardAlgorithmPane implements AlgorithmPane {
 	public IAlgorithm getAlgorithm() {
 		return null;
 	}
+
+	@Override
+	public void OnNext() {
+
+	}
+
+	@Override
+	public void OnPrev() {
+
+	}
 }

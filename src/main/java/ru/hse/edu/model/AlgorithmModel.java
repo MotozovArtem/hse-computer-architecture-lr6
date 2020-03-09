@@ -16,7 +16,7 @@ public class AlgorithmModel {
 
 	private final ObjectProperty<Algorithm> currentAlgorithm = new SimpleObjectProperty<>(null);
 
-	private void setCurrentAlgorithm(Algorithm algorithm) {
+	public void setCurrentAlgorithm(Algorithm algorithm) {
 		log.info("Current algorithm changed: {}", algorithm);
 		currentAlgorithm.setValue(algorithm);
 	}

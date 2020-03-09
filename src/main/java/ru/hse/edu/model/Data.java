@@ -1,9 +1,13 @@
 package ru.hse.edu.model;
 
 public class Data {
+
 	private Integer dataCacheAddress;
+
 	private Boolean valid;
+
 	private Boolean dirty;
+
 	private String cachedString;
 
 	public Data() {

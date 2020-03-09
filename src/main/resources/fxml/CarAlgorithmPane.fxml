@@ -1,11 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
-<VBox xmlns="http://javafx.com/javafx"
-	  xmlns:fx="http://javafx.com/fxml"
-	  fx:controller="ru.hse.edu.view.CarAlgorithmPane"
-	  prefHeight="400.0" prefWidth="600.0">
-	<Label text="Car algorithm"/>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-</VBox>
+<HBox spacing="10.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.hse.edu.view.CarAlgorithmPane">
+	<VBox HBox.hgrow="ALWAYS">
+		<Label text="Адреса слов в ОП" />
+		<TableView VBox.vgrow="ALWAYS">
+			<columns>
+				<TableColumn prefWidth="-1.0" text="Адресный тег" />
+				<TableColumn minWidth="44.0" prefWidth="44.0" text="Адрес слова в строке" />
+			</columns>
+			<columnResizePolicy>
+				<TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+			</columnResizePolicy>
+		</TableView>
+	</VBox>
+	<VBox HBox.hgrow="ALWAYS">
+		<Label text="Память тегов" />
+		<TableView VBox.vgrow="ALWAYS">
+			<columns>
+				<TableColumn prefWidth="-1.0" text="Адресный тег" />
+				<TableColumn minWidth="25.0" prefWidth="-1.0" text="Адрес строки в КЭШ" />
+			</columns>
+			<columnResizePolicy>
+				<TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+			</columnResizePolicy>
+		</TableView>
+	</VBox>
+	<VBox HBox.hgrow="ALWAYS">
+		<Label text="Память данных" />
+		<TableView VBox.vgrow="ALWAYS">
+			<columns>
+				<TableColumn minWidth="107.0" prefWidth="-1.0" text="Адрес строки в КЭШ" />
+				<TableColumn prefWidth="-1.0" text="Valid" />
+				<TableColumn prefWidth="-1.0" text="Dirty" />
+				<TableColumn prefWidth="-1.0" text="R" />
+				<TableColumn minWidth="28.0" prefWidth="-1.0" text="Строка" />
+			</columns>
+			<columnResizePolicy>
+				<TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+			</columnResizePolicy>
+			<tooltip>
+				<Tooltip text="R - флаг повторного обращения к блоку" />
+			</tooltip>
+		</TableView>
+	</VBox>
+</HBox>

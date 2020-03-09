@@ -1,7 +1,9 @@
 package ru.hse.edu.model;
 
 public class Tag {
+
 	private String tagAddress;
+
 	private Integer dataCacheAddress;
 
 	public Tag() {

@@ -26,5 +26,7 @@ public interface AlgorithmPane {
 
 	IAlgorithm getAlgorithm();
 
+	void OnNext();
 
+	void OnPrev();
 }

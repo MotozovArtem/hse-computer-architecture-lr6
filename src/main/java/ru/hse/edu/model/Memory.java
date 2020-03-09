@@ -3,7 +3,9 @@ package ru.hse.edu.model;
 import java.util.List;
 
 public class Memory {
+
 	private List<Tag> tagCache;
+
 	private List<Data> dataCache;
 
 	public List<Tag> getTagCache() {
