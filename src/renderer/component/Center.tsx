@@ -8,9 +8,11 @@ export default class Center extends React.PureComponent {
             <div className="container-fluid">
                 <div className="row">
                     <Navbar />
-                    <Content />
+                    <main role="main" className="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+                        <Content />
+                    </main>
                 </div>
-            </div>
+            </div >
         );
     }
 }

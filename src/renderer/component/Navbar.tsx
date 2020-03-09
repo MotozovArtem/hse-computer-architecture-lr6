@@ -1,4 +1,6 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import Routes from "../util/Routes";
 
 export default class Navbar extends React.PureComponent {
     public render() {
@@ -7,22 +9,25 @@ export default class Navbar extends React.PureComponent {
                 <div className="sidebar-sticky">
                     <ul className="nav flex-column">
                         <li className="nav-item">
-                            <a className="nav-link active" href="#">RND</a>
+                            <Link className="nav-link active" to={Routes.RND}>RND</Link>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" href="#">FIFO</a>
+                            <Link className="nav-link" to={Routes.FIFO}>FIFO</Link>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" href="#">MRU</a>
+                            <Link className="nav-link" to={Routes.MRU}>MRU</Link>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" href="#">ARC</a>
+                            <Link className="nav-link" to={Routes.ARC}>ARC</Link>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" href="#">CAR</a>
+                            <Link className="nav-link" to={Routes.CAR}>CAR</Link>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" href="#">LFU</a>
+                            <Link className="nav-link" to={Routes.LFU}>LFU</Link>
+                        </li>
+                        <li className="nav-item">
+                            <Link className="nav-link" to={Routes.LRU}>LRU</Link>
                         </li>
                     </ul>
                 </div>

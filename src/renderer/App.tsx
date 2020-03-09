@@ -1,6 +1,9 @@
 import React from "react";
-import { HashRouter, Route } from "react-router-dom";
+import { Route, HashRouter } from "react-router-dom";
 import MainPage from "./component/MainPage";
+import Header from "./component/Header";
+import Center from "./component/Center";
+import Footer from "./component/Footer";
 
 export default class App extends React.PureComponent {
 
@@ -8,7 +11,9 @@ export default class App extends React.PureComponent {
         return (
             <HashRouter>
                 <div className="App">
-                    <Route path="" component={MainPage}/>
+                    <Header />
+                    <Center />
+                    <Footer />
                 </div>
             </HashRouter>
         );

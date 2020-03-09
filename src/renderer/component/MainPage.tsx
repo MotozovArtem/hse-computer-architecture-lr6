@@ -7,9 +7,7 @@ export default class MainPage extends React.Component<{}, {}> {
     public render() {
       return (
           <div className="MainPage">
-            <Header />
-            <Center/>
-            <Footer />
+            
           </div>
       );
     }
