@@ -84,8 +84,8 @@
 				<configuration>
 					<vendor>MIEM HSE</vendor>
 					<appName>LR6</appName>
-					<mainClass>com.precisionhawk.tower.uploader.App</mainClass>
-					<nativeReleaseVersion>${project.version}.${buildVersion}</nativeReleaseVersion>
+					<mainClass>ru.hse.edu.App</mainClass>
+					<nativeReleaseVersion>${project.version}</nativeReleaseVersion>
 					<skipNativeVersionNumberSanitizing>true</skipNativeVersionNumberSanitizing>
 					<needShortcut>true</needShortcut>
 					<needMenu>true</needMenu>
@@ -97,12 +97,6 @@
 						<systemWide>true</systemWide>
 						<startOnInstall>false</startOnInstall>
 					</bundleArguments>
-					<jvmArgs>
-						<jvmArg>-Dauth0.clientId=${auth0.clientId}</jvmArg>
-						<jvmArg>-Dauth0.clientSecret=${auth0.clientSecret}</jvmArg>
-						<jvmArg>-Dpointivo.api.authorization=${pointivo.api.authorization}</jvmArg>
-						<jvmArg>-Dapp.buildVersion=${project.version}.${buildVersion}</jvmArg>
-					</jvmArgs>
 				</configuration>
 			</plugin>
 		</plugins>
