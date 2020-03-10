@@ -53,7 +53,7 @@
 						<manifest>
 							<addClasspath>true</addClasspath>
 							<classpathPrefix>lib/</classpathPrefix>
-							<mainClass>com.precisionhawk.tower.uploader.App</mainClass>
+							<mainClass>ru.hse.edu.App</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
