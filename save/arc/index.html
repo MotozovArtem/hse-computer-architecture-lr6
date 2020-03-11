@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ARC</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
+  </head>
+
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg">
+          <h1>Алгоритм замещения ARC</h1>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-2">
+          <h1 class="variant">Выберите вариант</h1>
+        </div>
+        <div class="col-sm">
+          <select id="variant" class="variant">
+            <option value="0" selected>Значение не выбрано</option>
+            <option value="1">Вариант 1</option>
+            <option value="2">Вариант 2</option>
+            <option value="3">Вариант 3</option>
+            <option value="1">Вариант 4</option>
+            <option value="2">Вариант 5</option>
+            <option value="3">Вариант 6</option>
+            <option value="1">Вариант 7</option>
+            <option value="2">Вариант 8</option>
+            <option value="3">Вариант 9</option>
+            <option value="1">Вариант 10</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-2">
+          <div class="processor hide">
+            <p class="h2">Адреса слов в ОП</p>
+            <table id="processor" class="table table-bordered table-hover">
+              <thead>
+                <tr>
+                  <td>Адресный тег</td>
+                  <td>Адрес слова в строке</td>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="col-sm-2">
+          <div class="tags hide">
+            <p class="h2">Память тегов</p>
+            <table id="tags" class="table table-bordered table-hover">
+              <thead>
+                <tr>
+                  <td>Адресный тег</td>
+                  <td>Адрес строки в КЭШ</td>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="cache hide">
+            <p class="h2">Память данных</p>
+            <table id="cache" class="table table-bordered table-hover">
+              <thead>
+                <tr>
+                  <td>Адрес строки в КЭШ</td>
+                  <td>Valid</td>
+                  <td>Dirty</td>
+                  <td>R</td>
+                  <td>Строки</td>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="col-sm-2">
+          <div class="ARC hide">
+            <p class="h1">Стек ARC</p>
+            <div class="row">
+              <div class="col-sm">
+                <div class="text-center">
+                  <p class="h2">T1</p>
+                </div>
+                <table id="t1" class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <td>Data</td>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+              <div class="col-sm">
+                <div class="text-center">
+                  <p class="h2">T2</p>
+                </div>
+                <table id="t2" class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <td>Data</td>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm">
+                <div class="text-center">
+                  <p class="h2">B1</p>
+                </div>
+                <table id="b1" class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <td>Link</td>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+              <div class="col-sm">
+                <div class="text-center">
+                  <p class="h2">B2</p>
+                </div>
+                <table id="b2" class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <td>Link</td>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="buttons hide col-sm-1">
+          <h3>Комментарии</h3>
+          <textarea id="comments" disabled></textarea>
+          <h3>Параметр р</h3>
+          <textarea id="parameter" disabled>8</textarea>
+          <br />
+          <br />
+          <br />
+          <br />
+          <input type="button" value="Вперёд" id="next" />
+          <input type="button" value="Назад" id="back" />
+          <input type="button" value="Удалить строку" id="delete" />
+          <input type="radio" id="option1" name="option" onClick="option1()" />
+          <label for="option1">с сохранением в ОП</label><br />
+          <input type="radio" id="option2" name="option" onClick="option2()" />
+          <label for="option2">без сохранения в ОП</label>
+          <br />
+          <br />
+          <br />
+          <br />
+        </div>
+      </div>
+    </div>
+    <script src="functions.js"></script>
+    <script src="main.js"></script>
+  </body>
+</html>

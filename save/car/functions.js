@@ -1,4 +1,4 @@
-function wait2(ms) {
+function wait(ms) {
 	return new Promise((resolve, reject) => {
 		setTimeout(() => {
 			resolve(ms);
@@ -6,15 +6,6 @@ function wait2(ms) {
 	})
 }
 
-// чтение данных из json-файла
-// variantNum - номер выбранного варианта
-function readTextFile(variantNum) {
-	let fs = require('fs');
-	let res = fs.readFileSync('src/main/car/arcVariants.json', 'utf8');
-	res = JSON.parse(res);
-	let arr = [res[`cashArr${variantNum}`], res[`shadowArr${variantNum}`], res[`searchArr${variantNum}`]];
-	return arr;
-}
 
 // генерация случайного числа в диапазоне от 0 до 1
 function randomInteger(min, max) {
@@ -50,7 +41,7 @@ function nextBtnOnClick() {
 	let str = "string " + processor.tBodies[0].rows[pointer].cells[0].innerHTML + "0";
 	if (!searchInList(str, t1).length && !searchInList(str, t2).length && !searchInList(str, b1).length && !searchInList(str, b2).length) {
 		// кэш-промах
-		//убираю предыдущее окрашивание
+		// убираю предыдущее окрашивание
 		[].forEach.call(processor.tBodies[0].rows, (elem) => {
 			elem.classList.remove("red", "green", "yellow", "grey");
 		});
@@ -128,16 +119,17 @@ function saveTablesState() {
 // data - искомые данные
 // list - список, в котором ищем
 function searchInList(data, list) {
+	let result = [];
 	for (let i = 0; i < list.tBodies[0].rows.length; i++) {
 		if (data === list.tBodies[0].rows[i].cells[0].innerHTML) {
-			return [list, i, 0, list.tBodies[0].rows[i].cells[0]];
+			result = [list, i, 0, list.tBodies[0].rows[i].cells[0]];
 			// 1й аргумент - элемент-таблица
 			// 2й аргумент - номер строки
 			// 3й аргумент - номер столбца
 			// 4й аргумент - элемент-ячейка
 		}
 	}
-	return [];
+	return result;
 }
 
 //обновляем таблицу "Память тегов"
@@ -175,19 +167,22 @@ function updateCache() {
 		row.insertCell(1);
 		row.insertCell(2);
 		row.insertCell(3);
+		row.insertCell(4);
 	}
 	let x = t1.tBodies[0].rows.length;
 	for (let i = 0; i < t1.tBodies[0].rows.length; i++) {
 		let text = t1.tBodies[0].rows[i].cells[0].innerHTML;
 		cache.tBodies[0].rows[i].cells[1].innerHTML = randomInteger(0, 1);
 		cache.tBodies[0].rows[i].cells[2].innerHTML = randomInteger(0, 1);
-		cache.tBodies[0].rows[i].cells[3].innerHTML = text;
+		cache.tBodies[0].rows[i].cells[3].innerHTML = 0;
+		cache.tBodies[0].rows[i].cells[4].innerHTML = text;
 	}
 	for (let i = 0; i < t2.tBodies[0].rows.length; i++) {
 		let text = t2.tBodies[0].rows[i].cells[0].innerHTML;
 		cache.tBodies[0].rows[x].cells[1].innerHTML = randomInteger(0, 1);
 		cache.tBodies[0].rows[x].cells[2].innerHTML = randomInteger(0, 1);
-		cache.tBodies[0].rows[x].cells[3].innerHTML = text;
+		cache.tBodies[0].rows[x].cells[3].innerHTML = 1;
+		cache.tBodies[0].rows[x].cells[4].innerHTML = text;
 		x++;
 	}
 }
@@ -278,8 +273,7 @@ function backBtnOnClick() {
 
 	if (processor.tBodies[0].rows[pointer] !== processor.tBodies[0].lastChild) {
 		pointer = pointer - 2;
-	}
-	else {
+	} else {
 		pointer--;
 	}
 
@@ -377,26 +371,6 @@ function option2() {
 	}
 }
 
-// заполнение таблиц начальными данными, считанными из json-файла
-function fillTables() {
-	for (let i = 0; i < searchArr.length; i++) {
-		processor.tBodies[0].innerHTML += `<tr><td>${searchArr[i]}</td><td>${randomInteger(0, 15)}</td></tr>`;
-	}
-
-	for (let i = 0; i < p; i++) {
-		t1.tBodies[0].innerHTML += `<tr><td>string ${cashArr[i]}0</td><td>${randomInteger(0, 1)}</td></tr>`;
-		t2.tBodies[0].innerHTML += `<tr><td>string ${cashArr[i + 8]}0</td><td>${randomInteger(0, 1)}</td></tr>`;
-		b1.tBodies[0].innerHTML += `<tr><td>string ${shadowArr[i]}0</td><td></td></tr>`;
-		b2.tBodies[0].innerHTML += `<tr><td>string ${shadowArr[i + 8]}0</td><td></td></tr>`;
-	}
-
-	for (let i = 0; i < c; i++) {
-		tags.tBodies[0].innerHTML += `<tr><td>${cashArr[i]}</td><td>${i}</td></tr>`
-		cache.tBodies[0].innerHTML += `<tr><td>${i}</td><td>${randomInteger(0, 1)}</td><td>${randomInteger(0, 1)}</td><td>string ${cashArr[i]}0</td></tr>`
-	}
-}
-
-
 function replace() {
 	let found = 0;
 	let deletedPage;
@@ -410,15 +384,13 @@ function replace() {
 				let lastPlace = t1.tBodies[0].rows[0];
 				let newPlace = b1.tBodies[0].firstChild;
 				environment.insertBefore(lastPlace, newPlace);
-			}
-			else {
+			} else {
 				comments.innerHTML = comments.innerHTML + "Сбрасываем page reference bit верхней строки T1, перемещаем строку в конец T2.\n\n";
 				t1.tBodies[0].rows[0].cells[1].innerHTML = 0;
 				t2.tBodies[0].appendChild(t1.tBodies[0].rows[0]);
 				t1.tBodies[0].removeChild(t1.tBodies[0].firstChild);
 			}
-		}
-		else {
+		} else {
 			if (t2.tBodies[0].rows[0].cells[1].innerHTML == 0) {
 				found = 1;
 				deletedPage = t2.tBodies[0].firstChild.cells[0].innerHTML;
@@ -427,8 +399,7 @@ function replace() {
 				let lastPlace = t2.tBodies[0].rows[0];
 				let newPlace = b2.tBodies[0].firstChild;
 				environment.insertBefore(lastPlace, newPlace);
-			}
-			else {
+			} else {
 				comments.innerHTML = comments.innerHTML + "Сбрасываем page reference bit верхней строки T2 и перемещаем ее в конец T2.\n\n";
 				t2.tBodies[0].rows[0].cells[1].innerHTML = 0;
 				t2.tBodies[0].appendChild(t2.tBodies[0].rows[0]);
@@ -457,7 +428,7 @@ function searchStr(str) {
 			searchT1[0].tBodies[0].rows[searchT1[1]].classList.add("greenText");
 			nextBtn.disabled = true;
 			backBtn.disabled = true;
-			wait2(1000).then(function () {
+			wait(WAIT_TIME_MILLIS).then(function () {
 				searchT1[0].tBodies[0].rows[searchT1[1]].classList.remove("greenText");
 				searchT1[0].tBodies[0].rows[searchT1[1]].cells[1].innerHTML = 1;
 				nextBtn.disabled = false;
@@ -468,7 +439,7 @@ function searchStr(str) {
 			searchT2[0].tBodies[0].rows[searchT2[1]].classList.add("greenText");
 			nextBtn.disabled = true;
 			backBtn.disabled = true;
-			wait2(1000).then(function () {
+			wait(WAIT_TIME_MILLIS).then(function () {
 				searchT2[0].tBodies[0].rows[searchT2[1]].classList.remove("greenText");
 				searchT2[0].tBodies[0].rows[searchT2[1]].cells[1].innerHTML = 1;
 				nextBtn.disabled = false;
@@ -490,52 +461,48 @@ function searchStr(str) {
 				b2.tBodies[0].removeChild(b2.tBodies[0].lastChild);
 			}
 		}
-
 		if (!searchB1.length && !searchB2.length) { // cache directory miss
 			comments.innerHTML = comments.innerHTML + "Заносим искомую строку в конец T1 с нулевым page reference bit.\n";
 			let tr = t1.tBodies[0].rows[0].cloneNode(true);
 			tr.innerHTML = `<td>${str}</td><td>0</td>`;
 			t1.tBodies[0].appendChild(tr);
 		}
-		else {
-			if (searchB1.length) {
-				// Adapt: Increase the target size for the list T1 as: p = min {p + max{1, |B2|/|B1|}, c}
-				comments.innerHTML = comments.innerHTML + "Изменяем параметр р.";
-				p = Math.min(p + Math.max(1, b2.tBodies[0].rows.length / b1.tBodies[0].rows.length), c);
-				parameter.innerHTML = p;
-				// Move x at the tail of T2. Set the page reference bit of x to 0
-				comments.innerHTML = comments.innerHTML + "Перемещаем искомую строку в конец T2 с нулевым page reference bit.\n\n";
-				let tr = t1.tBodies[0].rows[0].cloneNode(true);
-				tr.innerHTML = `<td>${str}</td><td>0</td>`;
-				t2.tBodies[0].appendChild(tr);
-				colorCacheHit("yellow", str);
+		else if (searchB1.length) {
+			// Adapt: Increase the target size for the list T1 as: p = min {p + max{1, |B2|/|B1|}, c}
+			comments.innerHTML = comments.innerHTML + "Изменяем параметр р.";
+			p = Math.min(p + Math.max(1, b2.tBodies[0].rows.length / b1.tBodies[0].rows.length), c);
+			parameter.innerHTML = p;
+			// Move x at the tail of T2. Set the page reference bit of x to 0
+			comments.innerHTML = comments.innerHTML + "Перемещаем искомую строку в конец T2 с нулевым page reference bit.\n\n";
+			let tr = t1.tBodies[0].rows[0].cloneNode(true);
+			tr.innerHTML = `<td>${str}</td><td>0</td>`;
+			t2.tBodies[0].appendChild(tr);
+			colorCacheHit("yellow", str);
 
-				[].forEach.call(b1.tBodies[0].rows, (elem) => {
-					if (elem.cells[0].innerHTML == str) {
-						elem.parentNode.removeChild(elem);
-					}
-				});
-			}
-			//cache directory hit
-			else { // x must be in B2
-				// Adapt: Decrease the target size for the list T1 as: p = max {p − max{1, |B1|/|B2|}, 0}
-				comments.innerHTML = comments.innerHTML + "Изменяем параметр р.";
-				let 
-				p = Math.max(p - Math.max(1, b1.tBodies[0].rows.length / b2.tBodies[0].rows.length), 0);
-				parameter.innerHTML = p;
-				// Move x at the tail of T2. Set the page reference bit of x to 0
-				comments.innerHTML = comments.innerHTML + "Перемещаем искомую строку в конец T2 с нулевым page reference bit.\n\n";
-				let tr = t1.tBodies[0].rows[0].cloneNode(true);
-				tr.innerHTML = `<td>${str}</td><td>0</td>`;
-				t2.tBodies[0].appendChild(tr);
-				colorCacheHit("yellow", str);
+			[].forEach.call(b1.tBodies[0].rows, (elem) => {
+				if (elem.cells[0].innerHTML == str) {
+					elem.parentNode.removeChild(elem);
+				}
+			});
+		}
+		//cache directory hit
+		else { // x must be in B2
+			// Adapt: Decrease the target size for the list T1 as: p = max {p − max{1, |B1|/|B2|}, 0}
+			comments.innerHTML = comments.innerHTML + "Изменяем параметр р.";
+			p = Math.max(p - Math.max(1, b1.tBodies[0].rows.length / b2.tBodies[0].rows.length), 0);
+			parameter.innerHTML = p;
+			// Move x at the tail of T2. Set the page reference bit of x to 0
+			comments.innerHTML = comments.innerHTML + "Перемещаем искомую строку в конец T2 с нулевым page reference bit.\n\n";
+			let tr = t1.tBodies[0].rows[0].cloneNode(true);
+			tr.innerHTML = `<td>${str}</td><td>0</td>`;
+			t2.tBodies[0].appendChild(tr);
+			colorCacheHit("yellow", str);
 
-				[].forEach.call(b2.tBodies[0].rows, (elem) => {
-					if (elem.cells[0].innerHTML == str) {
-						elem.parentNode.removeChild(elem);
-					}
-				});
-			}
+			[].forEach.call(b2.tBodies[0].rows, (elem) => {
+				if (elem.cells[0].innerHTML == str) {
+					elem.parentNode.removeChild(elem);
+				}
+			});
 		}
 	}
 	return result;

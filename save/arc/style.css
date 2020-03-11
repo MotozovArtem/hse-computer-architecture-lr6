@@ -3,11 +3,9 @@
 }
 
 .processor,.tags,.cache,.ARC,.L1,.L2, .buttons {
-	display: inline-block;
 }
 
 .processor {
-	padding-top: 60px;
 }
 
 .ARC>h1 {
@@ -15,18 +13,14 @@
 }
 
 table {
-	margin: 10px;
-	border: 1px solid grey;
 }
 
 td {
-	border: 1px solid grey;
-	padding: 5px;
 	width: 50px;
 }
 
 thead {
-	background: #696969;
+	background: #cecece;
 }
 
 .green, #t1>tbody, #t2>tbody {

@@ -1,53 +1,16 @@
-function wait1(ms) {
-	let start = Date.now(),
-		now = start;
-	while (now - start < ms) {
-		now = Date.now();
-	}
-}
-
-function wait2(ms) {
+function wait(ms) {
 	return new Promise((resolve, reject) => {
 		setTimeout(() => {
 			resolve(ms);
 		}, ms)
-	})
+	});
 }
 
-// чтение данных из json-файла
-// variantNum - номер выбранного варианта
-function readTextFile(variantNum) {
-	let fs = require('fs');
-	let res = fs.readFileSync('src/main/arc/arcVariants.json', 'utf8');
-	res = JSON.parse(res);
-	let arr = [res[`cashArr${variantNum}`], res[`shadowArr${variantNum}`], res[`searchArr${variantNum}`]];
-	return arr;
-}
-
-// генерация случайного числа в диапазоне от 0 до 1
+// генерация случайного числа в диапазоне от min до max
 function randomInteger(min, max) {
 	var rand = min + Math.random() * (max + 1 - min);
 	rand = Math.floor(rand);
 	return rand;
-}
-
-// заполнение таблиц начальными данными, считанными из json-файла
-function fillTables() {
-	for (let i = 0; i < searchArr.length; i++) {
-		processor.tBodies[0].innerHTML += `<tr><td>${searchArr[i]}</td><td>${randomInteger(0, 15)}</td></tr>`;
-	}
-
-	for (let i = 0; i < p; i++) {
-		t1.tBodies[0].innerHTML += `<tr><td>string ${cashArr[i]}0</td></tr>`;
-		t2.tBodies[0].innerHTML += `<tr><td>string ${cashArr[i + 8]}0</td></tr>`;
-		b1.tBodies[0].innerHTML += `<tr><td>string ${shadowArr[i]}0</td></tr>`;
-		b2.tBodies[0].innerHTML += `<tr><td>string ${shadowArr[i + 8]}0</td></tr>`;
-	}
-
-	for (let i = 0; i < c; i++) {
-		tags.tBodies[0].innerHTML += `<tr><td>${cashArr[i]}</td><td>${i}</td></tr>`
-		cache.tBodies[0].innerHTML += `<tr><td>${i}</td><td>${randomInteger(0, 1)}</td><td>${randomInteger(0, 1)}</td><td>string ${cashArr[i]}0</td></tr>`
-	}
 }
 
 // отработка нажатия кнопки "Вперёд"
@@ -118,7 +81,7 @@ function searchInList(data, list) {
 
 // кэш-попадание в T1, пересортировка L1,L2
 // arr - данные, по найденной строке
-function hitInT1(arr) {
+function cacheHitInT1(arr) {
 	comments.innerHTML = "Перемещаем искомую строку в начало списка T2";
 
 	let environment = t2.tBodies[0];
@@ -129,7 +92,7 @@ function hitInT1(arr) {
 	nextBtn.disabled = true;
 	backBtn.disabled = true;
 
-	wait2(2000).then(function () {
+	wait(WAIT_TIME_MILLIS).then(function () {
 		removeColoredCacheTags();
 		lastPlace.classList.remove("greenText");
 		environment.insertBefore(lastPlace, newPlace);
@@ -144,7 +107,7 @@ function hitInT1(arr) {
 
 // кэш-попадание в T2, пересортировка L1,L2
 // arr - данные, по найденной строке
-function hitInT2(arr) {
+function cacheHitInT2(arr) {
 	comments.innerHTML = "Перемещаем искомую строку в начало списка T2";
 
 	let environment = arr[0].tBodies[0];
@@ -155,7 +118,7 @@ function hitInT2(arr) {
 	nextBtn.disabled = true;
 	backBtn.disabled = true;
 
-	wait2(2000).then(function () {
+	wait(WAIT_TIME_MILLIS).then(function () {
 		removeColoredCacheTags();
 		lastPlace.classList.remove("greenText");
 		environment.insertBefore(lastPlace, newPlace);
@@ -174,15 +137,14 @@ function hitInT2(arr) {
 function replace(arr, p) {
 	let deletedStr;
 	let t1Size = t1.tBodies[0].rows.length;
-	if (t1Size && (t1Size > p) || (arr[0] === b2 && t1Size === p)) {
+	if (t1Size && (p >= t1Size) || (arr[0] === b2 && t1Size === p)) {
 		comments.innerHTML = comments.innerHTML + "\n\nПеремещаем LRU строку списка T1 в начало списка B1";
 		deletedStr = t1.tBodies[0].lastChild;
 		let environment = b1.tBodies[0];
 		let lastPlace = t1.tBodies[0].lastChild;
 		let newPlace = b1.tBodies[0].firstChild;
 		environment.insertBefore(lastPlace, newPlace);
-	}
-	else {
+	} else {
 		comments.innerHTML = comments.innerHTML + "\n\nПеремещаем LRU строку списка T2 в начало списка B2";
 		deletedStr = t2.tBodies[0].lastChild;
 		let environment = b2.tBodies[0];
@@ -195,82 +157,118 @@ function replace(arr, p) {
 
 // кэш-попадание в B1
 // arr - данные, по найденной строке
-function hitInB1(arr) {
+function cacheHitInB1(arr) {
 	comments.innerHTML = "Изменяем параметр р";
 
 	// обновляем параметр p
-	let b1Size = b1.tBodies[0].rows.length;
-	let b2Size = b2.tBodies[0].rows.length;
-	let b;
-	if (b1Size > b2Size) {
-		b = 1;
-	}
-	else {
-		b = b2Size / b1Size;
-	}
-	p = Math.min(p + b, c);
+	p += 1;
 	parameter.innerHTML = p;
+
 	// пересортировка L1,L2
 	replace(arr, p);
-	comments.innerHTML = comments.innerHTML + "\n\nПеремещаем искомую строку в начало списка T2";
-	let environment = t2.tBodies[0];
-	let lastPlace = arr[3].parentNode;
-	let newPlace = t2.tBodies[0].firstChild;
-	lastPlace.classList.add("blueText");
-	// colorCacheHit("yellow", arr[3].innerHTML);
-	nextBtn.disabled = true;
-	backBtn.disabled = true;
+	let t1Size = t1.tBodies[0].rows.length;
+	if (p >= t1Size) {
+		comments.innerHTML = comments.innerHTML + "\n\nПеремещаем искомую строку в начало списка T1";
+		let environment = t1.tBodies[0];
+		let lastPlace = arr[3].parentNode;
+		let newPlace = t1.tBodies[0].firstChild
+		lastPlace.classList.add("blueText");
+		nextBtn.disabled = true;
+		backBtn.disabled = true;
 
-	wait2(2000).then(function () {
-		removeColoredCacheTags();
-		lastPlace.classList.remove("blueText");
-		environment.insertBefore(lastPlace, newPlace);
-		t2.tBodies[0].firstChild.classList.add("greenText");
-		nextBtn.disabled = false;
-		backBtn.disabled = false;
-		colorCacheHit("green", arr[3].innerHTML);
-	});
+		b1.tBodies[0].deleteRow(b1.tBodies[0].rows.length - 1)
+
+		wait(WAIT_TIME_MILLIS).then(function () {
+			removeColoredCacheTags();
+			lastPlace.classList.remove("blueText");
+			environment.insertBefore(lastPlace, newPlace);
+			t1.tBodies[0].firstChild.classList.add("greenText");
+			nextBtn.disabled = false;
+			backBtn.disabled = false;
+			colorCacheHit("green", arr[3].innerHTML);
+		});
+	} else {
+		comments.innerHTML = comments.innerHTML + "\n\nПеремещаем искомую строку в начало списка T2";
+		let environment = t2.tBodies[0];
+		let lastPlace = arr[3].parentNode;
+		let newPlace = t2.tBodies[0].firstChild
+		lastPlace.classList.add("blueText");
+		nextBtn.disabled = true;
+		backBtn.disabled = true;
+
+		b2.tBodies[0].deleteRow(b2.tBodies[0].rows.length - 1)
+
+		wait(WAIT_TIME_MILLIS).then(function () {
+			removeColoredCacheTags();
+			lastPlace.classList.remove("blueText");
+			environment.insertBefore(lastPlace, newPlace);
+			t2.tBodies[0].firstChild.classList.add("greenText");
+			nextBtn.disabled = false;
+			backBtn.disabled = false;
+			colorCacheHit("green", arr[3].innerHTML);
+		});
+	}
 
 	return "yellow";
 }
 
 // кэш-попадание в B2
 // arr - данные, по найденной строке
-function hitInB2(arr) {
+function cacheHitInB2(arr) {
 	comments.innerHTML = "Изменяем параметр р";
 
 	// обновляем параметр p
-	let b1Size = b1.tBodies[0].rows.length;
-	let b2Size = b2.tBodies[0].rows.length;
-	let b;
-	if (b2Size > b1Size) {
-		b = 1;
-	}
-	else {
-		b = b1Size / b2Size;
-	}
-	p = Math.max(p - b, 0);
+	p -= 1;
 	parameter.innerHTML = p;
+
 	// пересортировка L1,L2
 	replace(arr, p);
-	comments.innerHTML = comments.innerHTML + "\n\nПеремещаем искомую строку в начало списка T2";
-	let environment = t2.tBodies[0];
-	let lastPlace = arr[3].parentNode;
-	let newPlace = t2.tBodies[0].firstChild
-	lastPlace.classList.add("blueText");
-	// colorCacheHit("yellow", arr[3].innerHTML);
-	nextBtn.disabled = true;
-	backBtn.disabled = true;
 
-	wait2(2000).then(function () {
-		removeColoredCacheTags();
-		lastPlace.classList.remove("blueText");
-		environment.insertBefore(lastPlace, newPlace);
-		t2.tBodies[0].firstChild.classList.add("greenText");
-		nextBtn.disabled = false;
-		backBtn.disabled = false;
-		colorCacheHit("green", arr[3].innerHTML);
-	});
+	debugger;
+	let t1Size = t1.tBodies[0].rows.length;
+	if (p >= t1Size) {
+		comments.innerHTML = comments.innerHTML + "\n\nПеремещаем искомую строку в начало списка T1";
+		let environment = t1.tBodies[0];
+		let lastPlace = arr[3].parentNode;
+		let newPlace = t1.tBodies[0].firstChild
+		lastPlace.classList.add("blueText");
+		nextBtn.disabled = true;
+		backBtn.disabled = true;
+		debugger;
+		b1.tBodies[0].deleteRow(b1.tBodies[0].rows.length - 1)
+
+		wait(WAIT_TIME_MILLIS).then(function () {
+			removeColoredCacheTags();
+			lastPlace.classList.remove("blueText");
+			environment.insertBefore(lastPlace, newPlace);
+			t1.tBodies[0].firstChild.classList.add("greenText");
+			nextBtn.disabled = false;
+			backBtn.disabled = false;
+			colorCacheHit("green", arr[3].innerHTML);
+		});
+	} else {
+		comments.innerHTML = comments.innerHTML + "\n\nПеремещаем искомую строку в начало списка T2";
+		let environment = t2.tBodies[0];
+		let lastPlace = arr[3].parentNode;
+		let newPlace = t2.tBodies[0].firstChild
+		lastPlace.classList.add("blueText");
+		nextBtn.disabled = true;
+		backBtn.disabled = true;
+
+		debugger;
+		b2.tBodies[0].deleteRow(b2.tBodies[0].rows.length - 1)
+
+
+		wait(WAIT_TIME_MILLIS).then(function () {
+			removeColoredCacheTags();
+			lastPlace.classList.remove("blueText");
+			environment.insertBefore(lastPlace, newPlace);
+			t2.tBodies[0].firstChild.classList.add("greenText");
+			nextBtn.disabled = false;
+			backBtn.disabled = false;
+			colorCacheHit("green", arr[3].innerHTML);
+		});
+	}
 
 	return "yellow";
 }
@@ -294,15 +292,19 @@ function updateCache() {
 	let x = t1.tBodies[0].rows.length;
 	for (let i = 0; i < t1.tBodies[0].rows.length; i++) {
 		let text = t1.tBodies[0].rows[i].cells[0].innerHTML;
-		cache.tBodies[0].rows[i].cells[1].innerHTML = randomInteger(0, 1);
-		cache.tBodies[0].rows[i].cells[2].innerHTML = randomInteger(0, 1);
-		cache.tBodies[0].rows[i].cells[3].innerHTML = text;
+		let cacheRow = cache.tBodies[0].rows[i];
+		cacheRow.cells[1].innerHTML = randomInteger(0, 1);
+		cacheRow.cells[2].innerHTML = randomInteger(0, 1);
+		cacheRow.cells[3].innerHTML = 0;
+		cacheRow.cells[4].innerHTML = text;
 	}
 	for (let i = 0; i < t2.tBodies[0].rows.length; i++) {
 		let text = t2.tBodies[0].rows[i].cells[0].innerHTML;
-		cache.tBodies[0].rows[x].cells[1].innerHTML = randomInteger(0, 1);
-		cache.tBodies[0].rows[x].cells[2].innerHTML = randomInteger(0, 1);
-		cache.tBodies[0].rows[x].cells[3].innerHTML = text;
+		let cacheTableRow = cache.tBodies[0].rows[x]
+		cacheTableRow.cells[1].innerHTML = randomInteger(0, 1);
+		cacheTableRow.cells[2].innerHTML = randomInteger(0, 1);
+		cacheTableRow.cells[3].innerHTML = 1;
+		cacheTableRow.cells[4].innerHTML = text;
 		x++;
 	}
 }
@@ -324,7 +326,7 @@ function colorCacheHit(color, data) {
 	}
 	//окрашиваем "Кэш-память"
 	for (let i = 0; i < cache.tBodies[0].rows.length; i++) {
-		if (cache.tBodies[0].rows[i].cells[3].innerHTML == data) {
+		if (cache.tBodies[0].rows[i].cells[4].innerHTML == data) {
 			if (color !== "red") {
 				cache.tBodies[0].rows[i].classList.add(color);
 			}
@@ -380,51 +382,41 @@ function deleteString(deletedStr) {
 // ищем строку в кэш-памяти
 // str - искомая строка
 function searchString(str) {
+	debugger;
 	let color = "red";
 	saveTablesState();
 	let searchResult = searchInList(str, t1);
 	if (searchResult.length) {
 		// Hit in T1
-		color = hitInT1(searchResult);
+		color = cacheHitInT1(searchResult);
 		// colorCacheHit(color, str);
 	}
 	else {
 		searchResult = searchInList(str, t2)
 		if (searchResult.length) {
 			// Hit in T2
-			color = hitInT2(searchResult);
+			color = cacheHitInT2(searchResult);
 			// colorCacheHit(color, str);
 		}
 		else {
 			searchResult = searchInList(str, b1);
 			if (searchResult.length) {
 				// Hit in B1
-				color = hitInB1(searchResult);
+				color = cacheHitInB1(searchResult);
 				// colorCacheHit(color, str);
 			}
 			else {
 				searchResult = searchInList(str, b2);
 				if (searchResult.length) {
 					// Hit in B2
-					color = hitInB2(searchResult);
+					color = cacheHitInB2(searchResult);
 					// colorCacheHit(color, str);
 				}
 				else {
 					// Cache miss
-					let deletedStr = miss(str);
-					if (previousT1_2 && previousT2_2 && previousB1_2 && previousB2_2) {
-						t1.innerHTML = previousT1_2;
-						t2.innerHTML = previousT2_2;
-						b1.innerHTML = previousB1_2;
-						b2.innerHTML = previousB2_2;
-					}
-					else {
-						t1.innerHTML = previousT1_1;
-						t2.innerHTML = previousT2_1;
-						b1.innerHTML = previousB1_1;
-						b2.innerHTML = previousB2_1;
-					}
-					deleteString(deletedStr);
+					let deletedStr = cacheMiss(str);
+					updateTags();
+					updateCache();
 				}
 			}
 		}
@@ -444,8 +436,7 @@ function backBtnOnClick() {
 
 	if (processor.tBodies[0].rows[pointer] !== processor.tBodies[0].lastChild) {
 		pointer = pointer - 2;
-	}
-	else {
+	} else {
 		pointer--;
 	}
 
@@ -472,7 +463,7 @@ function deleteBtnOnClick() {
 
 	let data = "string " + processor.tBodies[0].rows[pointer - 1].cells[0].innerHTML + "0";
 
-	miss(data);
+	cacheMiss(data);
 	updateTags();
 	updateCache();
 	//removeColoredStrings();
@@ -489,35 +480,36 @@ function deleteBtnOnClick() {
 }
 
 // пересортировка L1,L2 при кэш-промахе
-function miss(arr) {
+function cacheMiss(arr) {
 	let deletedStr;
 	let l1Size = t1.tBodies[0].rows.length + b1.tBodies[0].rows.length;
 	let l2Size = t2.tBodies[0].rows.length + b2.tBodies[0].rows.length;
 	let t1Size = t1.tBodies[0].rows.length;
 
-	if (l1Size === c) {
-		if (t1Size < c) {
-			comments.innerHTML = "Удаляем LRU строку списка B1";
-			b1.tBodies[0].removeChild(b1.tBodies[0].lastChild);
-			deletedStr = replace(arr, p);
-		}
-		else {
-			comments.innerHTML = "Удаляем LRU строку списка T1";
-			deletedStr = t1.tBodies[0].lastChild;
-			t1.tBodies[0].removeChild(t1.tBodies[0].lastChild);
-		}
-	}
-	else if ((l1Size < c) && ((l1Size + l2Size) >= c)) {
-		if ((l1Size + l2Size) === 2 * c) {
-			comments.innerHTML = "Удаляем LRU строку списка B2";
-			b2.tBodies[0].removeChild(b2.tBodies[0].lastChild);
-			deletedStr = replace(arr, p);
-		}
-	}
+	comments.innerHTML = "Удаляем LRU строку списка B1";
+	deletedStr = replace(arr, p);
+	b1.tBodies[0].removeChild(b1.tBodies[0].lastChild);
+	// debugger;
+	// if (l1Size === c) {
+	// 	if (t1Size < c) {
+
+	// 	} else {
+	// 		comments.innerHTML = "Удаляем LRU строку списка T1";
+	// 		deletedStr = t1.tBodies[0].lastChild;
+	// 		t1.tBodies[0].removeChild(t1.tBodies[0].lastChild);
+	// 	}
+	// } else if ((l1Size < c) && ((l1Size + l2Size) >= c)) {
+	// 	if ((l1Size + l2Size) === 2 * c) {
+	// 		comments.innerHTML = "Удаляем LRU строку списка B2";
+	// 		deletedStr = replace(arr, p);
+	// 		b2.tBodies[0].removeChild(b2.tBodies[0].lastChild);
+	// 	}
+	// }
 	comments.innerHTML = comments.innerHTML + "\n\nПомещаем искомую строку в начало списка T1";
 	let tr = document.createElement("tr");
 	tr.innerHTML = `<td>${arr}</td>`;
 	t1.tBodies[0].prepend(tr);
+	t1.tBodies[0].firstChild.classList.add("greenText");
 	return deletedStr;
 }
 
