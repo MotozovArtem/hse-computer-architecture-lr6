@@ -35,11 +35,6 @@ document.getElementById("variant").addEventListener("change", function () {
 	[].forEach.call(elems, function (el) {
 		el.classList.remove("hide");
 	});
-	// // прячем поле выбора варианта 
-	// elems = document.querySelectorAll(".variant");
-	// [].forEach.call(elems, function (el) {
-	// 	el.classList.add("hide");
-	// });
 	// читаем данные варианта из json-файла
 	let arr = readTextFile(this.value);
 	cashArr = arr[0];
@@ -59,15 +54,28 @@ function readTextFile(variantNum) {
 	return arr;
 }
 
+function clearTables() {
+	processor.tBodies[0].innerHTML = '';
+	t1.tBodies[0].innerHTML = '';
+	t2.tBodies[0].innerHTML = '';
+	b1.tBodies[0].innerHTML = '';
+	b2.tBodies[0].innerHTML = '';
+	tags.tBodies[0].innerHTML = '';
+	cache.tBodies[0].innerHTML = '';
+}
+
 // заполнение таблиц начальными данными, считанными из json-файла
 function fillTables() {
+
+	clearTables();
+
 	for (let i = 0; i < searchArr.length; i++) {
 		processor.tBodies[0].innerHTML += `<tr><td>${searchArr[i]}</td><td>${randomInteger(0, 15)}</td></tr>`;
 	}
 
 	for (let i = 0; i < p; i++) {
-		t1.tBodies[0].innerHTML += `<tr><td>string ${cashArr[i]}0</td><td>${randomInteger(0, 1)}</td></tr>`;
-		t2.tBodies[0].innerHTML += `<tr><td>string ${cashArr[i + 8]}0</td><td>${randomInteger(0, 1)}</td></tr>`;
+		t1.tBodies[0].innerHTML += `<tr><td>string ${cashArr[i]}0</td><td>${i % 2 == 0 ? 1 : 0}</td></tr>`;
+		t2.tBodies[0].innerHTML += `<tr><td>string ${cashArr[i + 8]}0</td><td>${i % 2 == 0 ? 0 : 1}</td></tr>`;
 		b1.tBodies[0].innerHTML += `<tr><td>string ${shadowArr[i]}0</td><td></td></tr>`;
 		b2.tBodies[0].innerHTML += `<tr><td>string ${shadowArr[i + 8]}0</td><td></td></tr>`;
 	}
@@ -78,8 +86,8 @@ function fillTables() {
 			<td>${i}</td>
 			<td>${randomInteger(0, 1)}</td>
 			<td>${randomInteger(0, 1)}</td>
-			<td>${i < c / 2 ? 0 : 1}</td>
-			<td>string ${cashArr[i]}0</td></tr>`
+			<td>string ${cashArr[i]}0</td>
+			</tr>`
 	}
 }
 

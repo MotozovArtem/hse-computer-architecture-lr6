@@ -34,11 +34,7 @@ document.getElementById("variant").addEventListener("change", function () {
 	[].forEach.call(elems, function (el) {
 		el.classList.remove("hide");
 	});
-	// // прячем поле выбора варианта 
-	// elems = document.querySelectorAll(".variant");
-	// [].forEach.call(elems, function (el) {
-	// 	el.classList.add("hide");
-	// });
+
 	// читаем данные варианта из json-файла
 	let arr = readTextFile(this.value);
 	cashArr = arr[0];
@@ -48,8 +44,19 @@ document.getElementById("variant").addEventListener("change", function () {
 	fillTables()
 });
 
+function clearTables() {
+	processor.tBodies[0].innerHTML = '';
+	t1.tBodies[0].innerHTML = '';
+	t2.tBodies[0].innerHTML = '';
+	b1.tBodies[0].innerHTML = '';
+	b2.tBodies[0].innerHTML = '';
+	tags.tBodies[0].innerHTML = '';
+	cache.tBodies[0].innerHTML = '';
+}
+
 // заполнение таблиц начальными данными, считанными из json-файла
 function fillTables() {
+	clearTables();
 	for (let i = 0; i < searchArr.length; i++) {
 		processor.tBodies[0].innerHTML += `<tr><td>${searchArr[i]}</td><td>${randomInteger(0, 15)}</td></tr>`;
 	}

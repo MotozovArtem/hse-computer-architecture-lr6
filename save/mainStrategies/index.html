@@ -11,88 +11,79 @@
     <script type="text/javascript" src="failure.js"></script>
     <script type="text/javascript" src="next.js"></script>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="bootstrap.min.css">
 </head>
 
 <body>
-    <div id="store" style="display: none;" data-strategy="" data-table2="" data-table3="" data-table4="" data-vd=""
-        data-start="no"></div>
-    <div id="del" style="display: none;" data-elem="" data-tag1="" data-i="" data-string=""></div>
-
-    <table id="table1">
-        <tr>
-            <th colspan="2" class="noneborder">Адреса слов в ОП</th>
-        </tr>
-        <tr>
-            <th class="grey">Адресный тег</th>
-            <th class="grey">Адрес слова в строке</th>
-        </tr>
-    </table>
-
-    <table id="table2">
-        <tr>
-            <th class="noneborder">Память тегов</th>
-        </tr>
-        <tr>
-            <th class="grey">Адресный тег</th>
-            <th class="grey">Адрес строки в КЭШ</th>
-        </tr>
-    </table>
-
-    <table id="table3">
-        <tr>
-            <th class="noneborder">Память данных (Кэш)</th>
-        </tr>
-        <tr>
-            <th class="grey">Адрес строки в КЭШ</th>
-            <th class="grey">Valid</th>
-            <th class="grey">Dirty</th>
-            <th class="grey">Data copy</th>
-        </tr>
-    </table>
-
-    <table id="table4" style="display:none;">
-        <thead>
-            <tr>
-                <th class="noneborder">Стек</th>
-            </tr>
-            <tr>
-                <th class="string grey">String</th>
-                <th class="count grey">Счетчик обращений</th>
-                <th class="time grey">Временная метка</th>
-            </tr>
-        </thead>
-        <tbody id="table4body">
-        </tbody>
-    </table>
-
-    <table id="table5" style="display:none;">
-        <tr>
-            <th class="noneborder">Стек</th>
-        </tr>
-        <tr>
-            <td>Empty stack</td>
-        </tr>
-    </table>
-
-    <div class="parameters">
-        <br><br><br>
-        <input type='button' id='forward' onclick="next()" value="Вперёд" /><br>
-        <input type='button' id='back' onclick="back()" value="Назад" /><br>
-        <input type='button' id='delete' onclick="del()" value="Удалить строку" /><br>
-        <input type='radio' id='option1' name='option' onclick="option(1)" />с сохранением в ОП<br>
-        <input type='radio' id='option2' name='option' onclick="option(2)" />без сохранения в ОП<br><br><br><br>
-        <input type='radio' id='rnd' class="strategy" name='type' value='RND'
-            onclick="start(value); startRND()" />RND<br>
-        <input type='radio' id='lfu' class="strategy" name='type' value='LFU'
-            onclick="start(value); startLFUandMRU()" />LFU<br>
-        <input type='radio' id='lru' class="strategy" name='type' value='LRU'
-            onclick="start(value); startLRU()" />LRU<br>
-        <input type='radio' id='mru' class="strategy" name='type' value='MRU'
-            onclick="start(value);startLFUandMRU()" />MRU<br>
-        <input type='radio' id='fifo' class="strategy" name='type' value='FIFO'
-            onclick="start(value); startFIFO()" />FIFO<br>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-2">
+                <p class="h4">Адреса слов в ОП</p>
+                <table id="table1" class="table table-bordered table-hover">
+                    <tr>
+                        <th class="grey">Адресный тег</th>
+                        <th class="grey">Адрес слова в строке</th>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-sm-3">
+                <p class="h4">Память тегов</p>
+                <table id="table2" class="table table-bordered table-hover">
+                    <tr>
+                        <th class="grey">Адресный тег</th>
+                        <th class="grey">Адрес строки в КЭШ</th>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-sm-4">
+                <p class="h4">Память данных (Кэш)</p>
+                <table id="table3" class="table table-bordered table-hover">
+                    <tr>
+                        <th class="grey">Адрес строки в КЭШ</th>
+                        <th class="grey">Valid</th>
+                        <th class="grey">Dirty</th>
+                        <th class="grey">Data copy</th>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-sm-1">
+                <p class="h4">Стек</p>
+                <table id="table4" style="display:none;" class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th class="string grey">String</th>
+                            <th class="count grey">Счетчик обращений</th>
+                            <th class="time grey">Временная метка</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table4body">
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-sm-2">
+                <div class="parameters">
+                    <br><br><br>
+                    <input type='button' id='forward' onclick="next()" value="Вперёд" /><br>
+                    <input type='button' id='back' onclick="back()" value="Назад" /><br>
+                    <input type='button' id='delete' onclick="del()" value="Удалить строку" /><br>
+                    <input type='radio' id='option1' name='option' onclick="option(1)" />с сохранением в ОП<br>
+                    <input type='radio' id='option2' name='option' onclick="option(2)" />без сохранения в ОП<br><br><br><br>
+                    <input type='radio' id='rnd' class="strategy" name='type' value='RND'
+                        onclick="start(value); startRND()" />RND<br>
+                    <input type='radio' id='lfu' class="strategy" name='type' value='LFU'
+                        onclick="start(value); startLFUandMRU()" />LFU<br>
+                    <input type='radio' id='lru' class="strategy" name='type' value='LRU'
+                        onclick="start(value); startLRU()" />LRU<br>
+                    <input type='radio' id='sc' class="strategy" name='type' value='SC'
+                        onclick="start(value);startLFUandMRU()" />SC<br>
+                    <input type='radio' id='fifo' class="strategy" name='type' value='FIFO'
+                        onclick="start(value); startFIFO()" />FIFO<br>
+                </div>
+            </div>
+        </div>
     </div>
-
+    <div id="store" style="display: none;" data-strategy="" data-table2="" data-table3="" data-table4="" data-vd=""data-start="no"></div>
+    <div id="del" style="display: none;" data-elem="" data-tag1="" data-i="" data-string=""></div>
 
     <script>
         //загружаю данные в таблицы из файла mainVariants.json
